@@ -18,16 +18,22 @@
           target="_blank"
           class="button--grey">GitHub</a>
       </div>
+      <div class="rest">
+        <h2>Data from Wordpress</h2>
+        <posts></posts>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 import AppLogo from '~/components/AppLogo.vue'
+import Posts from '~/components/Posts.vue'
 
 export default {
   components: {
-    AppLogo
+    AppLogo,
+    Posts
   }
 }
 </script>
