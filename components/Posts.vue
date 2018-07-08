@@ -1,6 +1,6 @@
 <template>
     <div class="posts">
-        <div class="posts__data">{{ posts }}</div>
+        <div class="posts__data">{{ posts[0].id }}</div>
     </div>
 </template>
 
@@ -16,7 +16,7 @@
             return Api()
                 .get('wp/v2/posts')
                 .then(responce => {
-                    this.posts = responce
+                    this.posts = responce.data;
                 })
                 .catch( error => {
                     console.log(error)
