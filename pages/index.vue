@@ -1,70 +1,100 @@
 <template>
   <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        vue-project
-      </h1>
-      <h2 class="subtitle">
-        Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
-      <div class="rest">
-        <h2>Data from Wordpress</h2>
-        <posts></posts>
-      </div>
+    <div class="page">
+			<h2>Data from Wordpress</h2>
+			<div class="posts">
+				<div class="posts__inner">
+					<post v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></post>
+				</div>
+			</div>
+
+			<div class="navigation-buttons">
+				<button v-if="page > 1" v-on:click="getData(--page)" class="navigation-buttons__button">Предыдущая страница</button>
+				<button v-if="page < totalPages" v-on:click="getData(++page)" class="navigation-buttons__button">Следующая страница</button>
+			</div>
+
     </div>
   </section>
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
-import Posts from '~/components/Posts.vue'
+import Api from "~/services/Api";
+import Post from '~/components/Post.vue'
 
 export default {
   components: {
-    AppLogo,
-    Posts
-  }
+    Post
+  },
+  data() {
+    return {
+			posts: '',
+			title: 'First page in vue',
+			page: 1,
+			perPage: 2,
+			totalPages: null
+    }
+  },
+  mounted() {
+		return Api()
+			.get('wp/v2/posts?page=' + this.page + '&per_page=' + this.perPage)
+			.then(responce => {
+					this.posts = responce.data;
+					this.totalPages = responce.headers['x-wp-totalpages'];
+			})
+			.catch( error => {
+					console.log(error)
+					this.errored = true
+			})
+	},
+	methods: {
+		getData(page) {
+			return Api()
+			.get('wp/v2/posts?page=' + page + '&per_page=' + this.perPage)
+			.then(responce => {
+					this.posts = responce.data;
+					this.totalPages = responce.headers['x-wp-totalpages'];
+			})
+			.catch( error => {
+					console.log(error)
+					this.errored = true
+			})
+		}
+	}
 }
 </script>
 
-<style>
+<style lang='scss'>
 .container {
-  min-height: 100vh;
+  width: 1200px;
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  flex-direction: column;
+
 }
 
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+.posts__inner {
+	display: flex;
+	flex-wrap: wrap;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.navigation-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	&__button {
+		border: none;
+		background: none;
+		font-size: 18px;
+		padding: 5px 10px;
+		font-weight: 700;
+		border-radius: 3px;
+		color: #ffffff;
+		background-color: #000;
+		cursor: pointer;
+	}
 }
 
-.links {
-  padding-top: 15px;
-}
 </style>
