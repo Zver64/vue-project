@@ -2,6 +2,6 @@ import axios from 'axios'
 
 export default () => {
     return axios.create({
-        baseURL: 'http://webstudio/wp-json/'
+        baseURL: 'https://demo.wp-api.org/wp-json/'
     })
 }

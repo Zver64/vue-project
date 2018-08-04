@@ -1,6 +1,7 @@
 <template>
     <div class="posts">
-        <div class="posts__data">{{ posts[0].id }}</div>
+        <div v-if='!posts'>Please wait</div>
+        <div v-else class="posts__data">{{ posts[0].id }}</div>
     </div>
 </template>
 
