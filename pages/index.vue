@@ -1,7 +1,8 @@
 <template>
-  <section class="container">
-    <div class="page">
+  <section class="page">
+    <div class="container">
 			<h2>Data from Wordpress</h2>
+			<router-link to='/post'>To single post</router-link>
 			<div class="posts">
 				<div class="posts__inner">
 					<post v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></post>
@@ -64,15 +65,22 @@ export default {
 </script>
 
 <style lang='scss'>
+
+@import 'styles/variables.scss';
+
+.page {
+	background-color: $color-main;
+}
+
 .container {
   width: 1200px;
-  max-width: 100%;
+	max-width: 100%;
+	margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  flex-direction: column;
-
+	flex-direction: column;
 }
 
 .posts__inner {
